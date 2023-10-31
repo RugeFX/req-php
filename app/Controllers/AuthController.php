@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\Dosen;
 use App\Models\User;
 
 class AuthController extends BaseController
@@ -59,12 +60,18 @@ class AuthController extends BaseController
         }
 
         $session = session();
-        $user_model = new User();
         $username = $this->request->getVar('username');
         $password = $this->request->getVar('password');
+        $model = null;
 
-        $data = $user_model->where('username', $username)->first();
-        
+        if($this->request->getVar("user") != null){
+            $model = new User();
+        }else if($this->request->getVar("dosen")){
+            $model = new Dosen();
+        }
+
+        $data = $model->where('username', $username)->first();
+            
         if(!$data){
             return redirect()->to('/signin')->with('error', ['username' => 'Username tidak ditemukan.']);
         }
@@ -76,15 +83,22 @@ class AuthController extends BaseController
             return redirect()->to('/signin')->with('error', ['password' => 'Password salah.']);
         }
 
-        $ses_data = [
+        $ses_data = $data["nim"] ? [
             'id' => $data['id'],
             'name' => $data['name'],
             'username' => $data['username'],
             'nim' => $data['nim'],
             'role' => $data['role'],
             'isLoggedIn' => true
-        ];
+        ] : [
+            'id' => $data['id'],
+            'name' => $data['name'],
+            'username' => $data['username'],
+            'role' => "dosen",
+            'isLoggedIn' => true
+        ];;
         $session->set("user_info", $ses_data);
+
         return redirect()->to('/dashboard');
     }
 

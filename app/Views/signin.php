@@ -28,7 +28,8 @@
                         <?php endforeach; ?>
                     </div>
                 <?php endif;?>
-                <button type="submit" class="w-full text-white bg-emerald-600 hover:bg-emerald-700 focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Masuk</button>
+                <button type="submit" name="user" value="user" class="w-full text-white bg-emerald-600 hover:bg-emerald-700 focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Masuk sebagai User</button>
+                <button type="submit" name="dosen" value="dosen" class="w-full text-emerald-600 bg-white hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Masuk sebagai Dosen</button>
                 <p class="text-sm font-light text-gray-500 dark:text-gray-400">
                     Belum punya akun? <a href="<?= base_url("signup") ?>" class="font-medium text-emerald-600 hover:underline dark:text-emerald-500">Sign Up disini</a>
                 </p>
