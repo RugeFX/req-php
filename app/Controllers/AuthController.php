@@ -96,7 +96,7 @@ class AuthController extends BaseController
             'username' => $data['username'],
             'role' => "dosen",
             'isLoggedIn' => true
-        ];;
+        ];
         $session->set("user_info", $ses_data);
 
         return redirect()->to('/dashboard');
