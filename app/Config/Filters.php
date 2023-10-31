@@ -26,6 +26,7 @@ class Filters extends BaseConfig
         'secureheaders' => SecureHeaders::class,
         'authGuard'     => \App\Filters\AuthGuard::class,
         'guest'         => \App\Filters\Guest::class,
+        'adminOnly'     => \App\Filters\AdminOnly::class,
     ];
 
     /**

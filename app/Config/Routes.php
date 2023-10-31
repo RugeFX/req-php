@@ -11,4 +11,6 @@ $routes->match(['get', 'post'], '/signup', 'AuthController::signup', ['filter' =
 $routes->match(['get', 'post'], '/signin', 'AuthController::signin', ['filter' => 'guest']);
 $routes->get("/logout", 'AuthController::logout', ['filter' => 'authGuard']);
 $routes->get("/testpw", "AuthController::testPw");
-$routes->get("/dashboard", "Home::index", ['filter' => 'authGuard']);
+$routes->get("/dashboard", "Home::dashboard", ['filter' => 'authGuard']);
+$routes->get("/daftar-seminar", "SeminarController::daftar_seminar", ['filter' => 'authGuard']);
+$routes->get("/info-seminar/(:segment)", "SeminarController::info_seminar/$1", ['filter' => ['authGuard', 'adminOnly']]);

@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Seminar extends Migration
+class SeminarParticipants extends Migration
 {
     public function up()
     {
@@ -15,18 +15,10 @@ class Seminar extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'dosen_id' => [
+            'seminar_id' => [
                 'type'           => 'INT',
                 'constraint'     => 5,
                 'unsigned'       => true,
-            ],
-            'judul'=> [
-                'type'=> 'VARCHAR',
-                'constraint' => 100
-            ],
-            'jadwal' => [
-                'type'       => 'datetime',
-                'default'    => '0000-00-00 00:00:00',
             ],
             'penyelenggara' => [
                 'type'           => 'INT',
@@ -35,13 +27,13 @@ class Seminar extends Migration
             ],
         ])
         ->addKey('id', true)
-        ->addForeignKey('dosen_id', 'dosen', 'id')
+        ->addForeignKey('seminar_id', 'seminar', 'id')
         ->addForeignKey('penyelenggara', 'user', 'id')
-        ->createTable('seminar');
+        ->createTable('seminar_participants');
     }
 
     public function down()
     {
-        $this->forge->dropTable('seminar');
+        $this->forge->dropTable('seminar_participants');
     }
 }

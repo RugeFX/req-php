@@ -28,13 +28,14 @@ class User extends Migration
                 'constraint' => '100',
             ],
             'role'=> [
-                'type' => 'ENUM("participant","presenter")',
+                'type' => 'ENUM("participant","presenter", "admin")',
                 'default' => 'participant',
                 'null' => false,
             ],
             'nim' => [
                 'type'           => 'INT',
                 'constraint'     => 12,
+                'null' => true,
             ],
             'status' => [
                 'type'=> 'BOOL',

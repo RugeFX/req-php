@@ -19,8 +19,8 @@
             <?php endif; ?>
         </div>
     </nav>
-    <main class="w-full h-full bg-gray-800">
+    <div class="w-full h-full bg-gray-800">
         <?= $this->renderSection('content') ?>
-    </main>
+    </div>
 </body>
 </html>

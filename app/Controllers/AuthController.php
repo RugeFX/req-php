@@ -66,8 +66,10 @@ class AuthController extends BaseController
 
         if($this->request->getVar("user") != null){
             $model = new User();
-        }else if($this->request->getVar("dosen")){
+        }else if($this->request->getVar("dosen") != null){
             $model = new Dosen();
+        }else{
+            return redirect()->to('/signin')->with('error', ['role' => 'Role tidak ditemukan.']);
         }
 
         $data = $model->where('username', $username)->first();
@@ -83,7 +85,7 @@ class AuthController extends BaseController
             return redirect()->to('/signin')->with('error', ['password' => 'Password salah.']);
         }
 
-        $ses_data = $data["nim"] ? [
+        $ses_data = isset($data["nim"]) ? [
             'id' => $data['id'],
             'name' => $data['name'],
             'username' => $data['username'],
@@ -110,6 +112,6 @@ class AuthController extends BaseController
     }
 
     public function testPw() {
-        return password_hash("sss123456", PASSWORD_DEFAULT);
+        return password_hash("dosen123", PASSWORD_DEFAULT);
     }
 }
