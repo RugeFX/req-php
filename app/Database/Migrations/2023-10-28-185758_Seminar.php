@@ -24,6 +24,9 @@ class Seminar extends Migration
                 'type'=> 'VARCHAR',
                 'constraint' => 100
             ],
+            "deskripsi" => [
+                "type"=> "TEXT",
+            ],
             'jadwal' => [
                 'type'       => 'datetime',
                 'default'    => '0000-00-00 00:00:00',
@@ -35,8 +38,8 @@ class Seminar extends Migration
             ],
         ])
         ->addKey('id', true)
-        ->addForeignKey('dosen_id', 'dosen', 'id')
-        ->addForeignKey('penyelenggara', 'user', 'id')
+        ->addForeignKey('dosen_id', 'dosen', 'id', '', 'CASCADE')
+        ->addForeignKey('penyelenggara', 'user', 'id', '', 'CASCADE')
         ->createTable('seminar');
     }
 

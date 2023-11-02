@@ -27,8 +27,8 @@ class SeminarParticipants extends Migration
             ],
         ])
         ->addKey('id', true)
-        ->addForeignKey('seminar_id', 'seminar', 'id')
-        ->addForeignKey('penyelenggara', 'user', 'id')
+        ->addForeignKey('seminar_id', 'seminar', 'id', '', 'CASCADE')
+        ->addForeignKey('penyelenggara', 'user', 'id', '', 'CASCADE')
         ->createTable('seminar_participants');
     }
 

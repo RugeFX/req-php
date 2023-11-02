@@ -17,6 +17,11 @@ class UserController extends BaseController
         $data = $model->findAll();
 
         $this->response->setHeader("Content-type", "application/json");
+        if(session()->get("user_info") == null) {
+            return json_encode([
+                "failed" => "Unauthenticated"
+            ]);
+        }
         return json_encode($data);
     }
 }

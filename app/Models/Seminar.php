@@ -13,7 +13,7 @@ class Seminar extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ["dosen_id", "judul", "jadwal", "penyelenggara"];
+    protected $allowedFields    = ["dosen_id", "judul", "deskripsi", "jadwal", "penyelenggara"];
 
     // Dates
     protected $useTimestamps = false;
