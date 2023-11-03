@@ -27,7 +27,20 @@ class SeminarController extends BaseController
     {
         $result = $this->get_seminar($id_seminar);
 
-        return view("info-seminar", ["seminar" => $result ? $result[0] : NULL]);
+        $id_user = session()->get("user_info")["id"];
+        $joined = $this->check_joined_seminar($id_seminar, $id_user);
+
+        $participants = $this->db->table("seminar_participants")
+        ->select("user.name")
+        ->join("user", "seminar_participants.participant = user.id")
+        ->where("seminar_participants.seminar_id", $id_seminar)
+        ->get();
+
+        return view("info-seminar", [
+            "seminar" => $result ? $result[0] : NULL, 
+            "joined" => $joined,
+            "participants" => $participants->getResult()
+        ]);
     }
 
     public function riwayat_seminar()
@@ -41,13 +54,15 @@ class SeminarController extends BaseController
     public function participate_seminar()
     {
         $id_user = session()->get("user_info")["id"];
-        $id_seminar = $this->request->getVar("seminar_id");
 
+        $id_seminar = $this->request->getVar("seminar_id");
         if(!$id_seminar) return redirect()->back();
 
         $exists = $this->builder->where("id", $id_seminar)->get()->getResult('array');
-
         if(count($exists) < 1) return redirect()->back();
+
+        $already_joined = $this->check_joined_seminar($id_seminar, $id_user);
+        if($already_joined) return redirect()->back();
 
         $join= $this->join_seminar($id_seminar, $id_user);
 
@@ -101,5 +116,15 @@ class SeminarController extends BaseController
             "participant" => $id_user
         ]);
         return [$update_user, $add_anchor];
+    }
+
+    private function check_joined_seminar($id_seminar, $id_user) {
+        $query = $this->db->table("seminar_participants")
+        ->select("id")
+        ->where("participant", $id_user)
+        ->where("seminar_id", $id_seminar)
+        ->get();
+        
+        return count($query->getResult()) > 0;
     }
 }
