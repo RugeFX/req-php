@@ -18,6 +18,30 @@ class Home extends BaseController
 
     public function dashboard()
     {
-        return view("dashboard", ["user_info" => session()->get("user_info")]);
+        $builder = \Config\Database::connect()->table('seminar');
+        $query = $builder
+        ->select("seminar.*, user.username AS penyelenggara_username, user.name AS penyelenggara_name, dosen.username AS dosen_username, dosen.name AS dosen_name")
+        ->join("user", "user.id = seminar.penyelenggara")
+        ->join("dosen", "dosen.id = seminar.dosen_id")
+        ->orderBy("seminar.jadwal","DESC")
+        ->limit(5)
+        ->get();
+
+        return view("dashboard", ["seminars" => $query->getResult()]);
+    }
+    
+    private function get_all_seminars(?int $limit = null): ?array {
+        $query = $this->builder
+            ->select("seminar.*, user.username AS penyelenggara_username, user.name AS penyelenggara_name, dosen.username AS dosen_username, dosen.name AS dosen_name")
+            ->join("user", "user.id = seminar.penyelenggara")
+            ->join("dosen", "dosen.id = seminar.dosen_id");
+
+        if ($limit) {
+            $query = $query->limit($limit);
+        }
+
+        $query = $query->get();
+
+        return $query->getResult();
     }
 }

@@ -20,15 +20,15 @@ class SeminarParticipants extends Migration
                 'constraint'     => 5,
                 'unsigned'       => true,
             ],
-            'penyelenggara' => [
+            "participant" => [
                 'type'           => 'INT',
                 'constraint'     => 5,
                 'unsigned'       => true,
-            ],
+            ]
         ])
         ->addKey('id', true)
         ->addForeignKey('seminar_id', 'seminar', 'id', '', 'CASCADE')
-        ->addForeignKey('penyelenggara', 'user', 'id', '', 'CASCADE')
+        ->addForeignKey('participant', 'user', 'id', '', 'CASCADE')
         ->createTable('seminar_participants');
     }
 

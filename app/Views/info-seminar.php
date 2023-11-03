@@ -13,11 +13,24 @@
             <h2 class="text-xl text-white font-semibold">Informasi Seminar</h2>
         </div>    
             <div class="p-2 text-white">
-                <?php if($seminar != NULL): ?>
+                <?php if($seminar !== NULL): ?>
                 <h1 class="text-emerald-400 text-2xl font-semibold"><?= esc($seminar->judul) ?></h1>
                 <span class="block text-gray-300"><?= esc($seminar->jadwal) ?></span>
                 <p class="text-lg pb-2"><?= esc($seminar->deskripsi) ?></p>
-                <span class="text-white"><?= var_dump($seminar) ?></span>
+                <table class="w-full text-center border-2 border-emerald-600 mb-2">
+                    <thead class="bg-emerald-600">
+                        <th class="py-2">Moderator</th>
+                        <th class="py-2">Presenter</th>
+                    </thead>
+                    <tbody class="bg-gray-600">
+                        <td class="py-2"><?= esc($seminar->dosen_name) ?></td>
+                        <td class="py-2"><?= esc($seminar->penyelenggara_name) ?></td>
+                    </tbody>
+                </table>
+                <form action="<?= base_url("participate-seminar") ?>" method="post">
+                    <input type="hidden" name="seminar_id" value="<?= esc($seminar->id) ?>">
+                    <button type="submit" class="w-full max-w-lg text-white bg-emerald-600 hover:bg-emerald-700 focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Ikuti Seminar</button>
+                </form>
                 <?php else: ?>
                 <h1 class="text-gray-300 text-2xl text-center font-semibold">Seminar tidak ditemukan</h1>
                 <?php endif; ?>
@@ -25,4 +38,11 @@
         </section>
     </main>
 </div>
+
+<?php $join = session()->getFlashdata('add_seminar'); if ($join !== null): ?>
+<script type="application/javascript">
+    alert("Join seminar <?= esc($join) ?>")
+</script>
+<?php endif; ?>
+
 <?= $this->endSection() ?>
