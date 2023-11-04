@@ -16,4 +16,4 @@ $routes->get("daftar-seminar", "SeminarController::daftar_seminar", ['filter' =>
 $routes->get("info-seminar/(:segment)", "SeminarController::info_seminar/$1", ['filter' => 'authGuard']);
 $routes->get("riwayat-seminar", "SeminarController::riwayat_seminar", ['filter' => ['authGuard', 'participantOnly']]);
 $routes->post("participate-seminar", "SeminarController::participate_seminar", ['filter' => ['authGuard', 'participantOnly']]);
-
+$routes->match(['get', 'post'],'buat-seminar', 'SeminarController::buat_seminar', ['filter'=> ['authGuard','presenterOnly']]);

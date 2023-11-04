@@ -13,6 +13,7 @@ class SeminarSeeder extends Seeder
             "judul" => "Seminar Test",
             "deskripsi" => "Ini adalah tes seminar pertama.",
             "jadwal" => date("Y-m-d 00:10",strtotime('tomorrow')),
+            'status'=> "accepted",
             "penyelenggara" => 3
         ];
 

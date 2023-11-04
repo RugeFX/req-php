@@ -19,6 +19,7 @@ class Seminar extends Migration
                 'type'           => 'INT',
                 'constraint'     => 5,
                 'unsigned'       => true,
+                'null'=> true,
             ],
             'judul'=> [
                 'type'=> 'VARCHAR',
@@ -30,6 +31,10 @@ class Seminar extends Migration
             'jadwal' => [
                 'type'       => 'datetime',
                 'default'    => '0000-00-00 00:00:00',
+            ],
+            "status" => [
+                'type' => 'ENUM("pending","accepted")',
+                'default' => 'pending',
             ],
             'penyelenggara' => [
                 'type'           => 'INT',

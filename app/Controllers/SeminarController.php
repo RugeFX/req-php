@@ -71,6 +71,27 @@ class SeminarController extends BaseController
         return redirect()->to("info-seminar/".$id_seminar)->with("add_seminar", "success");
     }
 
+    public function buat_seminar()
+    {
+        if($this->request->getMethod() === "get"){
+            return view("buat-seminar");
+        }
+        if($this->request->getMethod() !== "post"){
+            return redirect()->to("/");
+        }
+        
+        $data = [
+            "penyelenggara" => session()->get("user_info")["id"],
+            "judul" => $this->request->getVar("judul"),
+            "deskripsi"=> $this->request->getVar("deskripsi"),
+            "jadwal"=> strtotime("Y-m-d H:i:s", (int)$this->request->getVar("jadwal")),
+        ];
+        
+        $add = $this->builder->insert($data);
+
+        return redirect()->to("buat-seminar")->with("status", $add ? "success" : "failed");
+    }
+
     private function get_seminar($id_seminar): ?array {
         $query = $this->builder
             ->select("seminar.*, user.username AS penyelenggara_username, user.name AS penyelenggara_name, dosen.username AS dosen_username, dosen.name AS dosen_name")
@@ -86,7 +107,8 @@ class SeminarController extends BaseController
         $query = $this->builder
             ->select("seminar.*, user.username AS penyelenggara_username, user.name AS penyelenggara_name, dosen.username AS dosen_username, dosen.name AS dosen_name")
             ->join("user", "user.id = seminar.penyelenggara")
-            ->join("dosen", "dosen.id = seminar.dosen_id");
+            ->join("dosen", "dosen.id = seminar.dosen_id")
+            ->where("seminar.status", "accepted");
 
         if ($limit) {
             $query = $query->limit($limit);

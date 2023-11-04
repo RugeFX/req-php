@@ -1,8 +1,10 @@
 <?= $this->extend('layouts/root_layout') ?>
 <?= $this->section('content') ?>
+<?php $role = session()->get("user_info")["role"] ?>
 <div class="flex gap-5 pt-28 pb-6 px-5 min-h-screen">
 <?= view_cell("SidebarCell", ["selected_item_idx" => 0]) ?>
     <main class="flex-1 bg-gray-700 rounded-lg p-2">
+    <?php if($role === "participant"): ?>
         <section id="seminar-terbaru">
             <h2 class="text-xl text-white font-semibold px-2 pb-2">Informasi Anda</h2>
             <div class="max-w-sm p-6 bg-gray-600 border border-gray-400 rounded-lg mb-2">
@@ -18,24 +20,28 @@
                 </div>
                 <span class="block text-2xl text-white text-center"><?= $riwayat_sidang ?></span>
             </div>
-            <h2 class="text-xl text-white font-semibold px-2 pb-2">Seminar Terbaru</h2>
-            <?php 
-            if($seminars != NULL): ?>
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 items-start">
-                <?php foreach($seminars as $sem): ?>
-                <?= view_cell("SeminarCell", [
-                    "id_seminar" => $sem->id, 
-                    "judul" => $sem->judul, 
-                    "tanggal" => $sem->jadwal,
-                    "moderator" => $sem->dosen_name,
-                    "presenter" => $sem->penyelenggara_name
-                ]) ?>
-                <?php endforeach; ?>
-            </div>
-            <?php else: ?>
-            <h1 class="text-gray-300 text-2xl text-center font-semibold">Belum ada seminar yang terdaftar</h1>
-            <?php endif; ?>
-        </section>
+                <h2 class="text-xl text-white font-semibold px-2 pb-2">Seminar Terbaru</h2>
+                <?php 
+                if($seminars != NULL): ?>
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 items-start">
+                    <?php foreach($seminars as $sem): ?>
+                    <?= view_cell("SeminarCell", [
+                        "id_seminar" => $sem->id, 
+                        "judul" => $sem->judul, 
+                        "tanggal" => $sem->jadwal,
+                        "moderator" => $sem->dosen_name,
+                        "presenter" => $sem->penyelenggara_name
+                    ]) ?>
+                    <?php endforeach; ?>
+                </div>
+                <?php else: ?>
+                <h1 class="text-gray-300 text-2xl text-center font-semibold">Belum ada seminar yang terdaftar</h1>
+                <?php endif; ?>
+            </section>
+    <?php elseif($role === "presenter"): ?>
+        <h2 class="text-xl text-white font-semibold px-2 mb-3">Akses Cepat</h2>
+        <a href="<?= base_url("buat-seminar") ?>" class="block w-full max-w-xl text-white bg-emerald-600 hover:bg-emerald-700 focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-5 py-5 text-center">Buat / Jadwal Seminar</a>
+    <?php endif; ?>
     </main>
 </div>
 <?= $this->endSection() ?>

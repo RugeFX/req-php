@@ -28,6 +28,7 @@ class Filters extends BaseConfig
         'guest'         => \App\Filters\Guest::class,
         'adminOnly'     => \App\Filters\AdminOnly::class,
         'participantOnly' => \App\Filters\ParticipantOnly::class,
+        'presenterOnly' => \App\Filters\PresenterOnly::class,
     ];
 
     /**
