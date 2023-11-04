@@ -41,6 +41,9 @@
     <?php elseif($role === "presenter"): ?>
         <h2 class="text-xl text-white font-semibold px-2 mb-3">Akses Cepat</h2>
         <a href="<?= base_url("buat-seminar") ?>" class="block w-full max-w-xl text-white bg-emerald-600 hover:bg-emerald-700 focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-5 py-5 text-center">Buat / Jadwal Seminar</a>
+    <?php elseif($role === "dosen"): ?>
+        <h2 class="text-xl text-white font-semibold px-2 mb-3">Akses Cepat</h2>
+        <a href="<?= base_url("daftar-seminar") ?>" class="block w-full max-w-xl text-white bg-emerald-600 hover:bg-emerald-700 focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-5 py-5 text-center">Daftar Seminar</a>
     <?php endif; ?>
     </main>
 </div>

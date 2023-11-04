@@ -13,7 +13,7 @@
                     "id_seminar" => $sem->id, 
                     "judul" => $sem->judul, 
                     "tanggal" => $sem->jadwal,
-                    "moderator" => $sem->dosen_name,
+                    "moderator" => $sem->dosen_name ?? "-",
                     "presenter" => $sem->penyelenggara_name
                 ]) ?>
                 <?php endforeach; ?>

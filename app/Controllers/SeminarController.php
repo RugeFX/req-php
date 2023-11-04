@@ -18,7 +18,8 @@ class SeminarController extends BaseController
 
     public function daftar_seminar()
     {
-        $result = $this->get_all_seminars();
+        $role = session()->get("user_info")["role"];
+        $result = $this->get_all_seminars(null, $role === "dosen");
 
         return view("daftar-seminar", ["seminars" => $result]);
     }
@@ -66,9 +67,7 @@ class SeminarController extends BaseController
 
         $join= $this->join_seminar($id_seminar, $id_user);
 
-        if(!$join[0] || !$join[1]) return redirect()->to("info-seminar/".$id_seminar)->with("add_seminar", "failed");
-
-        return redirect()->to("info-seminar/".$id_seminar)->with("add_seminar", "success");
+        return redirect()->to("info-seminar/".$id_seminar)->with("join_seminar", ($join[0] && $join[1]) ? "success" : "failed");
     }
 
     public function buat_seminar()
@@ -84,7 +83,7 @@ class SeminarController extends BaseController
             "penyelenggara" => session()->get("user_info")["id"],
             "judul" => $this->request->getVar("judul"),
             "deskripsi"=> $this->request->getVar("deskripsi"),
-            "jadwal"=> strtotime("Y-m-d H:i:s", (int)$this->request->getVar("jadwal")),
+            "jadwal"=> date("Y-m-d H:i:s", strtotime($this->request->getVar("jadwal"))),
         ];
         
         $add = $this->builder->insert($data);
@@ -92,23 +91,43 @@ class SeminarController extends BaseController
         return redirect()->to("buat-seminar")->with("status", $add ? "success" : "failed");
     }
 
+    public function accept_seminar()
+    {
+        $id_dosen = session()->get("user_info")["id"];
+        $id_seminar = $this->request->getVar("seminar_id");
+
+        $accept = $this->builder
+        ->where("id", $id_seminar)
+        ->set("dosen_id", $id_dosen)
+        ->set("status", "accepted")
+        ->update();
+
+        return redirect()->to("info-seminar/".$id_seminar)->with("accept_seminar", $accept ? "success" : "failed");
+    }
+
     private function get_seminar($id_seminar): ?array {
         $query = $this->builder
             ->select("seminar.*, user.username AS penyelenggara_username, user.name AS penyelenggara_name, dosen.username AS dosen_username, dosen.name AS dosen_name")
             ->join("user", "user.id = seminar.penyelenggara")
-            ->join("dosen", "dosen.id = seminar.dosen_id")
+            ->join("dosen", "dosen.id = seminar.dosen_id", "left")
             ->where("seminar.id", $id_seminar)
             ->get();
 
         return $query->getResult();
     }
 
-    private function get_all_seminars(?int $limit = null): ?array {
+    private function get_all_seminars(?int $limit = null, ?bool $dosen = false): ?array {
+        $queryString = "seminar.*, user.username AS penyelenggara_username, user.name AS penyelenggara_name, dosen.username AS dosen_username, dosen.name AS dosen_name";
         $query = $this->builder
-            ->select("seminar.*, user.username AS penyelenggara_username, user.name AS penyelenggara_name, dosen.username AS dosen_username, dosen.name AS dosen_name")
+            ->select($queryString)
             ->join("user", "user.id = seminar.penyelenggara")
-            ->join("dosen", "dosen.id = seminar.dosen_id")
-            ->where("seminar.status", "accepted");
+            ->join("dosen", "dosen.id = seminar.dosen_id", "left");
+
+        if(!$dosen) {
+            $query = $query->where("seminar.status", "accepted");
+        }else{
+            $query = $query->where("seminar.status", "pending");
+        }
 
         if ($limit) {
             $query = $query->limit($limit);
